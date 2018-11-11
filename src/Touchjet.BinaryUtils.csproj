@@ -9,17 +9,14 @@
     <PackageProjectUrl>https://github.com/touchjet/BinaryUtils</PackageProjectUrl>
     <Description>C# utilities handling binaries.</Description>
     <PackageId>Touchjet.BinaryUtils</PackageId>
-    <PackageVersion>1.0.1</PackageVersion>
+    <PackageVersion>1.0.2</PackageVersion>
     <PackOnBuild>true</PackOnBuild>
-    <PackageReleaseNotes>Remove some dependancies.</PackageReleaseNotes>
+    <PackageReleaseNotes>Remove Nuget.Build.Packaging</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType></DebugType>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="NuGet.Build.Packaging" Version="0.2.2" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Remove="Logging\ArraySegmentLoggingExtensions.cs" />
     <Compile Remove="ArraySegmentLoggingExtensions.cs" />
