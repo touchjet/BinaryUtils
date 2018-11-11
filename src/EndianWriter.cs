@@ -17,7 +17,6 @@
  * limitations under the License.
 */
 using System;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Text;
 
@@ -79,7 +78,6 @@ namespace Touchjet.BinaryUtils
                 throw new ArgumentNullException(nameof(encoding));
             if (!output.CanWrite)
                 throw new ArgumentException("Can't write to the output stream", nameof(output));
-            Contract.EndContractBlock();
 
             OutStream = output;
             buffer = new byte[16];
@@ -175,7 +173,6 @@ namespace Touchjet.BinaryUtils
         {
             if (buffer == null)
                 throw new ArgumentNullException(nameof(buffer));
-            Contract.EndContractBlock();
             OutStream.Write(buffer, 0, buffer.Length);
         }
 
@@ -199,9 +196,6 @@ namespace Touchjet.BinaryUtils
         {
             if (char.IsSurrogate(ch))
                 throw new ArgumentException("Surrogates not allowed as single char", nameof(ch));
-            Contract.EndContractBlock();
-
-            Contract.Assert(Encoding.GetMaxByteCount(1) <= 16, "_encoding.GetMaxByteCount(1) <= 16)");
             oneChar[0] = ch;
             var numBytes = encoder.GetBytes(oneChar, 0, 1, buffer, 0, true);
             OutStream.Write(buffer, 0, numBytes);
@@ -216,7 +210,6 @@ namespace Touchjet.BinaryUtils
         {
             if (chars == null)
                 throw new ArgumentNullException(nameof(chars));
-            Contract.EndContractBlock();
 
             var bytes = Encoding.GetBytes(chars, 0, chars.Length);
             OutStream.Write(bytes, 0, bytes.Length);
@@ -527,7 +520,6 @@ namespace Touchjet.BinaryUtils
         public void Write(string value)
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
-            Contract.EndContractBlock();
 
             var len = Encoding.GetByteCount(value);
             Write7BitEncodedInt(len);

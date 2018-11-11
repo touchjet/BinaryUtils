@@ -17,7 +17,6 @@
  * limitations under the License.
 */
 using System;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Security;
 using System.Text;
@@ -66,7 +65,6 @@ namespace Touchjet.BinaryUtils
             }
             if (!input.CanRead)
                 throw new ArgumentException("Can't read from the output stream", nameof(input));
-            Contract.EndContractBlock();
 
             BaseStream = input;
             decoder = encoding.GetDecoder();
@@ -84,8 +82,6 @@ namespace Touchjet.BinaryUtils
 
             Endianness = endianess;
             resolvedEndianess = EndianessHelper.Resolve(endianess);
-
-            Contract.Assert(decoder != null, "[EndianReader.ctor]m_decoder!=null");
         }
 
         public Stream BaseStream { get; private set; }
@@ -119,8 +115,6 @@ namespace Touchjet.BinaryUtils
 
         public int PeekChar()
         {
-            Contract.Ensures(Contract.Result<int>() >= -1);
-
             if (BaseStream == null)
             {
                 throw new ObjectDisposedException(null, "The stream is closed");
@@ -136,8 +130,6 @@ namespace Touchjet.BinaryUtils
 
         public int Read()
         {
-            Contract.Ensures(Contract.Result<int>() >= -1);
-
             if (BaseStream == null)
             {
                 throw new ObjectDisposedException(null, "The stream is closed");
@@ -355,8 +347,6 @@ namespace Touchjet.BinaryUtils
 
         public string ReadString()
         {
-            Contract.Ensures(Contract.Result<string>() != null);
-
             if (BaseStream == null)
             {
                 throw new ObjectDisposedException(null, "The stream is closed");
@@ -428,10 +418,6 @@ namespace Touchjet.BinaryUtils
             {
                 throw new ArgumentException("Invalid offset");
             }
-            Contract.Ensures(Contract.Result<int>() >= 0);
-            Contract.Ensures(Contract.Result<int>() <= count);
-            Contract.EndContractBlock();
-
             if (BaseStream == null)
             {
                 throw new ObjectDisposedException(null, "The stream is closed");
@@ -444,10 +430,6 @@ namespace Touchjet.BinaryUtils
         [SecurityCritical]
         private int InternalReadChars(char[] buffer, int index, int count)
         {
-            Contract.Requires(buffer != null);
-            Contract.Requires(index >= 0 && count >= 0);
-            Contract.Assert(BaseStream != null);
-
             var charsRemaining = count;
 
             if (charBytes == null)
@@ -478,16 +460,11 @@ namespace Touchjet.BinaryUtils
                     return (count - charsRemaining);
                 }
 
-                Contract.Assert(byteBuffer != null, "expected byteBuffer to be non-null");
                 charsRead = decoder.GetChars(byteBuffer, position, numBytes, buffer, index, false);
 
                 charsRemaining -= charsRead;
                 index += charsRead;
             }
-
-            // this should never fail
-            Contract.Assert(charsRemaining >= 0, "We read too many characters.");
-
             // we may have read fewer than the number of characters requested if end of stream reached 
             // or if the encoding makes the char count too big for the buffer (e.g. fallback sequence)
             return (count - charsRemaining);
@@ -540,8 +517,6 @@ namespace Touchjet.BinaryUtils
                     return -1;
                 }
 
-                Contract.Assert(numBytes == 1 || numBytes == 2, "EndianReader::InternalReadOneChar assumes it's reading one or 2 bytes only.");
-
                 try
                 {
 
@@ -557,13 +532,8 @@ namespace Touchjet.BinaryUtils
 
                     throw;
                 }
-
-                Contract.Assert(charsRead < 2, "InternalReadOneChar - assuming we only got 0 or 1 char, not 2!");
-                //                Console.WriteLine("That became: " + charsRead + " characters.");
             }
-            if (charsRead == 0)
-                return -1;
-            return singleChar[0];
+            return charsRead == 0 ? -1 : singleChar[0];
         }
 
         [SecuritySafeCritical]
@@ -573,9 +543,6 @@ namespace Touchjet.BinaryUtils
             {
                 throw new ArgumentOutOfRangeException(nameof(count), "Positive or zero value required");
             }
-            Contract.Ensures(Contract.Result<char[]>() != null);
-            Contract.Ensures(Contract.Result<char[]>().Length <= count);
-            Contract.EndContractBlock();
             if (BaseStream == null)
             {
                 throw new ObjectDisposedException(null, "The stream is closed");
@@ -609,9 +576,6 @@ namespace Touchjet.BinaryUtils
                 throw new ArgumentOutOfRangeException(nameof(count), "Positive or zero value required");
             if (buffer.Length - index < count)
                 throw new ArgumentException("Invalid offset");
-            Contract.Ensures(Contract.Result<int>() >= 0);
-            Contract.Ensures(Contract.Result<int>() <= count);
-            Contract.EndContractBlock();
 
             if (BaseStream == null)
             {
@@ -623,9 +587,6 @@ namespace Touchjet.BinaryUtils
         public byte[] ReadBytes(int count)
         {
             if (count < 0) throw new ArgumentOutOfRangeException(nameof(count), "Positive or zero value required");
-            Contract.Ensures(Contract.Result<byte[]>() != null);
-            Contract.Ensures(Contract.Result<byte[]>().Length <= Contract.OldValue(count));
-            Contract.EndContractBlock();
             if (BaseStream == null)
             {
                 throw new ObjectDisposedException(null, "The stream is closed");

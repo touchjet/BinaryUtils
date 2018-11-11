@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using JetBrains.Annotations;
 
 namespace Touchjet.BinaryUtils
 {
@@ -31,7 +30,7 @@ namespace Touchjet.BinaryUtils
         /// Initializes a new instance of the <see cref="ArraySegment{T}"/> structure that delimits the specified
         /// range of the elements in the specified array.
         /// </summary>
-        public static ArraySegment<T> Segment<T>([NotNull] this T[] array, int offset, int count)
+        public static ArraySegment<T> Segment<T>(this T[] array, int offset, int count)
         {
             if (array == null) throw new ArgumentNullException(nameof(array));
 
@@ -42,7 +41,7 @@ namespace Touchjet.BinaryUtils
         /// Initializes a new instance of the <see cref="ArraySegment{T}"/> structure that delimits the specified
         /// number of the elements in the specified array starting from offset 0.
         /// </summary>
-        public static ArraySegment<T> Segment<T>([NotNull] this T[] array, int count)
+        public static ArraySegment<T> Segment<T>(this T[] array, int count)
         {
             if (array == null) throw new ArgumentNullException(nameof(array));
 
@@ -53,7 +52,7 @@ namespace Touchjet.BinaryUtils
         /// Initializes a new instance of the <see cref="ArraySegment{T}"/> structure that delimits all the elements
         /// in the specified array.
         /// </summary>
-        public static ArraySegment<T> Segment<T>([NotNull] this T[] array)
+        public static ArraySegment<T> Segment<T>(this T[] array)
         {
             if (array == null) throw new ArgumentNullException(nameof(array));
 
@@ -80,8 +79,7 @@ namespace Touchjet.BinaryUtils
             return new ArraySegment<T>(segment.Array, segment.Offset + offset, count);
         }
 
-        [AssertionMethod]
-        static void ThrowIfNegative(int value, [InvokerParameterName] string name)
+        static void ThrowIfNegative(int value, string name)
         {
             if (value < 0) throw new ArgumentOutOfRangeException(name, "Offset can't be negative");
         }
@@ -159,7 +157,7 @@ namespace Touchjet.BinaryUtils
             return true;
         }
 
-        public static void WriteAsHexTo(this ArraySegment<byte> segment, [NotNull] TextWriter writer,
+        public static void WriteAsHexTo(this ArraySegment<byte> segment, TextWriter writer,
             bool includeAscii = true, bool includeStartAddresses = true)
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
@@ -206,31 +204,31 @@ namespace Touchjet.BinaryUtils
             return writer.ToString();
         }
 
-        public static string ToHexString([CanBeNull] this byte[] array)
+        public static string ToHexString(this byte[] array)
         {
             var writer = new StringWriter();
             array.WriteHexString(writer);
             return writer.ToString();
         }
 
-        public static string ToHexString([CanBeNull] this byte[] array, int offset, int count)
+        public static string ToHexString(this byte[] array, int offset, int count)
         {
             var writer = new StringWriter();
             array.WriteHexString(writer, offset, count);
             return writer.ToString();
         }
 
-        public static void WriteHexString(this ArraySegment<byte> segment, [NotNull] TextWriter writer)
+        public static void WriteHexString(this ArraySegment<byte> segment, TextWriter writer)
         {
             WriteHexString(segment.Array, writer, segment.Offset, segment.Count);
         }
 
-        public static void WriteHexString([CanBeNull] this byte[] array, [NotNull] TextWriter writer)
+        public static void WriteHexString(this byte[] array, TextWriter writer)
         {
             WriteHexString(array, writer, 0, array?.Length ?? 0);
         }
 
-        public static void WriteHexString([CanBeNull] this byte[] array, [NotNull] TextWriter writer, int offset, int count)
+        public static void WriteHexString(this byte[] array, TextWriter writer, int offset, int count)
         {
             if (writer == null)
             {
