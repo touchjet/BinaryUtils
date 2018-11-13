@@ -31,9 +31,23 @@ namespace Touchjet.BinaryUtils
         /// <returns>The hex.</returns>
         /// <param name="the_bytes">The bytes.</param>
         /// <param name="separator">Separator.</param>
-        public static string ToHex(this byte[] the_bytes, string separator = " ")
+        public static string ToHex(this byte[] the_bytes, string separator="")
         {
             return BitConverter.ToString(the_bytes, 0).Replace("-", separator);
         }
+
+        /// <summary>
+        /// Return a string that represents the byte array as a series of hexadecimal values separated by a separator character.
+        /// </summary>
+        /// <returns>The hex.</returns>
+        /// <param name="the_bytes">The bytes.</param>
+        /// <param name="startIndex">Start Index.</param>
+        /// <param name="length">Length.</param>
+        /// <param name="separator">Separator.</param>
+        public static string ToHex(this byte[] the_bytes, int startIndex, int length, string separator = "")
+        {
+            return BitConverter.ToString(the_bytes, startIndex,length).Replace("-", separator);
+        }
+
     }
 }

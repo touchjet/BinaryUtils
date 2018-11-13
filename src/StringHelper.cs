@@ -17,6 +17,7 @@
  * limitations under the License.
 */
 using System;
+using System.Linq;
 
 namespace Touchjet.BinaryUtils
 {
@@ -32,14 +33,46 @@ namespace Touchjet.BinaryUtils
         /// <param name="the_string">The string.</param>
         public static byte[] ToBytes(this string the_string)
         {
-            // Get the separator character.
-            char separator = the_string[2];
+            if (the_string.Length < 2)
+            {
+                throw new ArgumentOutOfRangeException(the_string, "Input string is too short.");
+            }
+            if (the_string.Length == 2)
+            {
+                return new byte[1] { Convert.ToByte(the_string, 16) };
+            }
+            else
+            {
+                char separator = the_string[2];
+                string[] pairs;
 
-            // Split at the separators.
-            string[] pairs = the_string.Split(separator);
-            byte[] bytes = new byte[pairs.Length];
-            for (int i = 0; i < pairs.Length; i++)
-                bytes[i] = Convert.ToByte(pairs[i], 16);
+                if (((separator >= '0') && (separator <= '9')) || ((separator >= 'a') && (separator <= 'f')) || ((separator >= 'A') && (separator <= 'F')))
+                {
+                    pairs = Enumerable.Range(0, the_string.Length / 2).Select(i => the_string.Substring(i * 2, 2)).ToArray();
+                }
+                else
+                {
+                    pairs = the_string.Split(separator);
+                }
+
+                byte[] bytes = new byte[pairs.Length];
+                for (int i = 0; i < pairs.Length; i++)
+                    bytes[i] = Convert.ToByte(pairs[i], 16);
+                return bytes;
+            }
+        }
+
+        /// <summary>
+        /// Convert a string containing 2-digit hexadecimal values into a byte array.
+        /// </summary>
+        /// <returns>The bytes.</returns>
+        /// <param name="the_string">The string.</param>
+        /// <param name="startIndex">Start Index.</param>
+        /// <param name="length">Length.</param>
+        public static byte[] ToBytes(this string the_string, int startIndex, int length)
+        {
+            var bytes = new byte[length];
+            Array.Copy(the_string.ToBytes(), startIndex, bytes, 0, length);
             return bytes;
         }
     }

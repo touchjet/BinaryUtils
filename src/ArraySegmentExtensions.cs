@@ -19,8 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace Touchjet.BinaryUtils
 {
@@ -157,95 +155,14 @@ namespace Touchjet.BinaryUtils
             return true;
         }
 
-        public static void WriteAsHexTo(this ArraySegment<byte> segment, TextWriter writer,
-            bool includeAscii = true, bool includeStartAddresses = true)
+        public static string ToHex(this ArraySegment<byte> segment)
         {
-            if (writer == null) throw new ArgumentNullException(nameof(writer));
-
-            int shown = 0;
-            while (shown < segment.Count)
-            {
-                if (includeStartAddresses)
-                {
-                    writer.Write("0x{0:X8}  ", shown);
-                }
-
-                var bytes = segment.Segment(shown, Math.Min(16, segment.Count - shown));
-                foreach (var b in bytes.AsEnumerable())
-                {
-                    writer.Write("{0:X2} ", b);
-                }
-                if (includeAscii)
-                {
-                    writer.Write(new string(' ', (16 - bytes.Count) * 3));
-                    writer.Write(" ");
-                    foreach (var b in bytes.AsEnumerable())
-                    {
-                        if (b >= 0x20 && b < 0x7F)
-                        {
-                            var c = Encoding.UTF8.GetChars(new[] { b }).Single();
-                            writer.Write(c);
-                        }
-                        else
-                        {
-                            writer.Write('.');
-                        }
-                    }
-                }
-                writer.WriteLine();
-                shown += bytes.Count;
-            }
+            return segment.Array.ToHex();
         }
 
-        public static string ToHexString(this ArraySegment<byte> segment)
+        public static string ToHex(this ArraySegment<byte> segment, int startIndex, int length, string separator = "")
         {
-            var writer = new StringWriter();
-            segment.WriteHexString(writer);
-            return writer.ToString();
-        }
-
-        public static string ToHexString(this byte[] array)
-        {
-            var writer = new StringWriter();
-            array.WriteHexString(writer);
-            return writer.ToString();
-        }
-
-        public static string ToHexString(this byte[] array, int offset, int count)
-        {
-            var writer = new StringWriter();
-            array.WriteHexString(writer, offset, count);
-            return writer.ToString();
-        }
-
-        public static void WriteHexString(this ArraySegment<byte> segment, TextWriter writer)
-        {
-            WriteHexString(segment.Array, writer, segment.Offset, segment.Count);
-        }
-
-        public static void WriteHexString(this byte[] array, TextWriter writer)
-        {
-            WriteHexString(array, writer, 0, array?.Length ?? 0);
-        }
-
-        public static void WriteHexString(this byte[] array, TextWriter writer, int offset, int count)
-        {
-            if (writer == null)
-            {
-                throw new ArgumentNullException(nameof(writer));
-            }
-
-            if (array == null)
-            {
-                writer.Write("null");
-                return;
-            }
-
-            var end = offset + count;
-            for (var i = offset; i < end; i++)
-            {
-                writer.Write("{0:X2}", array[i]);
-            }
+            return segment.Array.ToHex(startIndex,length,separator);
         }
     }
 }
