@@ -22,56 +22,59 @@ namespace Touchjet.BinaryUtils
 {
     public static class UIntHelper
     {
-        public static byte[] ToBytes(this UInt16 value, bool littleEndian)
+        public static byte[] ToBytes(this UInt16 value, Endianness endianness)
         {
-            if (littleEndian)
+            switch (endianness)
             {
-                return new byte[]
-                {
+                case Endianness.LittleEndian:
+                    return new byte[]
+                    {
                 (byte)value,
                 (byte)(value >> 8),
-                };
-            }
-            else
-            {
-                return new byte[]
-                {
+                    };
+                case Endianness.BigEndian:
+                    return new byte[]
+                    {
                 (byte)(value >> 8),
                 (byte)value,
-                };
+                    };
+                default:
+                    throw new ArgumentOutOfRangeException($"Unsupported Endianness {endianness}");
             }
         }
 
-        public static byte[] ToBytes(this UInt32 value, bool littleEndian)
+        public static byte[] ToBytes(this UInt32 value, Endianness endianness)
         {
-            if (littleEndian)
+            switch (endianness)
             {
-                return new byte[]
-                {
+                case Endianness.LittleEndian:
+                    return new byte[]
+                    {
                 (byte)value,
                 (byte)(value >> 8),
                 (byte)(value >> 16),
                 (byte)(value >> 24),
-                };
-            }
-            else
-            {
-                return new byte[]
-                {
+                    };
+                case Endianness.BigEndian:
+                    return new byte[]
+                    {
                 (byte)(value >> 24),
                 (byte)(value >> 16),
                 (byte)(value >> 8),
                 (byte)value,
-                };
+                    };
+                default:
+                    throw new ArgumentOutOfRangeException($"Unsupported Endianness {endianness}");
             }
         }
 
-        public static byte[] ToBytes(this UInt64 value, bool littleEndian)
+        public static byte[] ToBytes(this UInt64 value, Endianness endianness)
         {
-            if (littleEndian)
+            switch (endianness)
             {
-                return new byte[]
-                {
+                case Endianness.LittleEndian:
+                    return new byte[]
+                    {
                 (byte)value,
                 (byte)(value >> 8),
                 (byte)(value >> 16),
@@ -80,12 +83,10 @@ namespace Touchjet.BinaryUtils
                 (byte)(value >> 40),
                 (byte)(value >> 48),
                 (byte)(value >> 56),
-                };
-            }
-            else
-            {
-                return new byte[]
-                {
+                    };
+                case Endianness.BigEndian:
+                    return new byte[]
+                    {
                 (byte)(value >> 56),
                 (byte)(value >> 48),
                 (byte)(value >> 40),
@@ -94,7 +95,9 @@ namespace Touchjet.BinaryUtils
                 (byte)(value >> 16),
                 (byte)(value >> 8),
                 (byte)value,
-                };
+                    };
+                default:
+                    throw new ArgumentOutOfRangeException($"Unsupported Endianness {endianness}");
             }
         }
     }

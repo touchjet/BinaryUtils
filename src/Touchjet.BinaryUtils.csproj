@@ -9,9 +9,9 @@
     <PackageProjectUrl>https://github.com/touchjet/BinaryUtils</PackageProjectUrl>
     <Description>C# utilities handling binaries.</Description>
     <PackageId>Touchjet.BinaryUtils</PackageId>
-    <PackageVersion>1.0.3</PackageVersion>
+    <PackageVersion>1.0.4</PackageVersion>
     <PackOnBuild>true</PackOnBuild>
-    <PackageReleaseNotes>Remove redundant code.</PackageReleaseNotes>
+    <PackageReleaseNotes>Change UIntHelper methods parameters.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
