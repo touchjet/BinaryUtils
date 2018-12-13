@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard1.6</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Authors>Zhen Liu</Authors>
     <PackageLicenseUrl>https://github.com/touchjet/BinaryUtils/blob/master/LICENSE</PackageLicenseUrl>
@@ -9,9 +9,9 @@
     <PackageProjectUrl>https://github.com/touchjet/BinaryUtils</PackageProjectUrl>
     <Description>C# utilities handling binaries.</Description>
     <PackageId>Touchjet.BinaryUtils</PackageId>
-    <PackageVersion>1.0.4</PackageVersion>
+    <PackageVersion>1.0.5</PackageVersion>
     <PackOnBuild>true</PackOnBuild>
-    <PackageReleaseNotes>Change UIntHelper methods parameters.</PackageReleaseNotes>
+    <PackageReleaseNotes>Add ByteBuffer, change to NetStandard 1.6</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
